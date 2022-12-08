@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 //Enemy inherits from MovingObject, our base class for objects that can move, Player also inherits from this.
 public class Enemy : MovingObject
 {
     public int playerDamage;                             //The amount of food points to subtract from the player when attacking.
-
+    
 
     private Animator animator;                            //Variable of type Animator to store a reference to the enemy's Animator component.
     private Transform target;                            //Transform to attempt to move toward each turn.
@@ -73,6 +74,7 @@ public class Enemy : MovingObject
 
         //Call the AttemptMove function and pass in the generic parameter Player, because Enemy is moving and expecting to potentially encounter a Player
         AttemptMove<Player>(xDir, yDir);
+        //AttemptMove<Wall>(xDir, yDir);
     }
 
 
@@ -80,6 +82,7 @@ public class Enemy : MovingObject
     //and takes a generic parameter T which we use to pass in the component we expect to encounter, in this case Player
     protected override void OnCantMove<T>(T component)
     {
+
         //Declare hitPlayer and set it to equal the encountered component.
         Player hitPlayer = component as Player;
 
@@ -88,7 +91,6 @@ public class Enemy : MovingObject
 
         //Set the attack trigger of animator to trigger Enemy attack animation.
         animator.SetTrigger("enemyAttack");
-        SoundManager.instance.RandomizeSfx(enemyAttack1,enemyAttack2);
-
+        SoundManager.instance.RandomizeSfx(enemyAttack1, enemyAttack2);
     }
 }
